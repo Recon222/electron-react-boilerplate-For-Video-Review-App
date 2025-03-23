@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -43,19 +43,20 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 // Add handler for opening file dialog
 ipcMain.handle('open-file-dialog', async () => {
-  const { dialog } = require('electron');
-  const result = await dialog.showOpenDialog({
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    title: 'Open Video',
     properties: ['openFile'],
     filters: [
-      { name: 'Videos', extensions: ['mp4', 'mkv', 'avi', 'mov', 'webm', 'wmv'] }
+      { name: 'Video Files', extensions: ['mp4', 'webm', 'mkv', 'mov', 'avi', 'wmv', 'flv', 'mpg'] },
+      { name: 'All Files', extensions: ['*'] }
     ]
   });
   
-  if (result.canceled) {
+  if (canceled) {
     return [];
   }
   
-  return result.filePaths;
+  return filePaths;
 });
 
 if (process.env.NODE_ENV === 'production') {

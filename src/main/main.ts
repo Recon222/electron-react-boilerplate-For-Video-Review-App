@@ -17,7 +17,7 @@ import { resolveHtmlPath } from './util';
 import { getPluginEntry } from 'mpv.js';
 
 // Path to your local copy of the DLL
-const pluginDir = path.join(__dirname, "external-libs");
+const pluginDir = path.resolve("D:\\Unit Projects\\Video Reviewer\\New Electron React Boilerplate Starting Point\\electron-react-boilerplate-For-Video-Review-App\\external-libs");
 // Change working directory on Windows
 process.chdir(pluginDir);
 // Usual setup

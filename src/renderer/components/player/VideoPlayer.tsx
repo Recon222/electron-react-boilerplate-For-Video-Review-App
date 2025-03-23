@@ -1,10 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card';
-import { Button } from '@blueprintjs/core/lib/esm/components/button/button';
-import { Dialog } from '@blueprintjs/core/lib/esm/components/dialog/dialog';
-import { Classes } from '@blueprintjs/core/lib/esm/common/classes';
-import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon';
-import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
+import { Card, Button, Dialog, Classes, Icon, Overlay } from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import Timeline from './Timeline';
 import TransportControls from './TransportControls';

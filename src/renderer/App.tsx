@@ -1,7 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { Button } from '@blueprintjs/core/lib/esm/components/button/button';
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card';
-import { Classes } from '@blueprintjs/core/lib/esm/common/classes';
+import { Button, Card, Classes } from './utils/blueprintComponents';
 import ThemeProvider from './components/ui/ThemeProvider';
 import { PlayerProvider } from './context/PlayerContext';
 import VideoPlayer from './components/player/VideoPlayer';

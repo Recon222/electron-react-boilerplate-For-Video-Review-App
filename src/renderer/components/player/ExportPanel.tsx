@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import { Card } from '@blueprintjs/core/lib/esm/components/card/card';
-import { FormGroup } from '@blueprintjs/core/lib/esm/components/forms/formGroup';
-import { HTMLSelect } from '@blueprintjs/core/lib/esm/components/html-select/htmlSelect';
-import { Slider } from '@blueprintjs/core/lib/esm/components/slider/slider';
-import { Button } from '@blueprintjs/core/lib/esm/components/button/button';
-import { ProgressBar } from '@blueprintjs/core/lib/esm/components/progress-bar/progressBar';
-import { Callout } from '@blueprintjs/core/lib/esm/components/callout/callout';
-import { Classes } from '@blueprintjs/core/lib/esm/common/classes';
-import { Label } from '@blueprintjs/core/lib/esm/components/forms/label';
-import { Checkbox } from '@blueprintjs/core/lib/esm/components/checkbox/checkbox';
-import { NumericInput } from '@blueprintjs/core/lib/esm/components/forms/numericInput';
+import { Card, FormGroup, HTMLSelect, Slider, Button, ProgressBar, Callout, Classes, Label, Checkbox, NumericInput } from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import { formatTime, formatTimeWithMs } from '../../utils/timeFormatter';
 import './ExportPanel.css';

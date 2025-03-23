@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect } from 'react';
-import { Classes } from '@blueprintjs/core/lib/esm/common/classes';
-import { FocusStyleManager } from '@blueprintjs/core/lib/esm/common/focusStyleManager';
+import { Classes, FocusStyleManager } from '../../utils/blueprintComponents';
 import { blueprintTheme, cssVariables } from '../../styles/blueprintTheme';
 
 interface ThemeProviderProps {

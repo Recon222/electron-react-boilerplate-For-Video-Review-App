@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@blueprintjs/core/lib/esm/components/button/button';
-import { ButtonGroup } from '@blueprintjs/core/lib/esm/components/button/buttonGroup';
-import { Slider } from '@blueprintjs/core/lib/esm/components/slider/slider';
-import { Popover } from '@blueprintjs/core/lib/esm/components/popover/popover';
-import { Menu } from '@blueprintjs/core/lib/esm/components/menu/menu';
-import { MenuItem } from '@blueprintjs/core/lib/esm/components/menu/menuItem';
-import { Position } from '@blueprintjs/core/lib/esm/common/position';
-import { Divider } from '@blueprintjs/core/lib/esm/components/divider/divider';
-import { Classes } from '@blueprintjs/core/lib/esm/common/classes';
-import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon';
+import { Button, ButtonGroup, Slider, Popover, Menu, MenuItem, Position, Divider, Classes, Icon } from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import './TransportControls.css';
 

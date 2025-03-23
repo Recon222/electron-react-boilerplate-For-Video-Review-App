@@ -1,147 +1,99 @@
-.video-timeline {
-  display: flex;
-  flex-direction: column;
+.timeline-container {
   width: 100%;
-  padding: 8px 16px;
-  background-color: var(--nc-dark-bg-color);
-  border-top: 1px solid var(--nc-light-bg-color);
+  padding: 0 10px;
+  margin-bottom: 5px;
   user-select: none;
 }
 
-.timeline-controls {
+.timeline-slider-container {
+  position: relative;
+  height: 40px;
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
 }
 
-.time-display {
-  margin-left: 12px;
-  font-family: monospace;
-  font-size: 13px;
-  color: var(--nc-text-color);
-}
-
-.frame-display {
-  margin-left: 12px;
-  font-family: monospace;
-  font-size: 13px;
-  color: var(--nc-text-color);
-  margin-left: auto;
-}
-
-.timeline-track {
-  position: relative;
+.timeline-slider {
   width: 100%;
-  height: 36px;
+  margin: 0;
+  z-index: 2;
 }
 
-/* Custom styling for Blueprint sliders */
-.playback-slider {
-  height: 16px;
-}
-
-.trim-slider {
-  height: 16px;
-}
-
-/* Override Blueprint slider classes */
-.video-timeline .bp4-slider-track {
-  height: 6px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-.video-timeline .bp4-slider-progress {
-  background-color: var(--nc-carolina-blue);
-  height: 6px;
-  border-radius: 3px;
-}
-
-.video-timeline .bp4-slider-handle {
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  background-color: var(--nc-carolina-blue);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-}
-
-.video-timeline .bp4-slider-handle:hover {
-  background-color: var(--nc-button-blue);
-}
-
-/* Trim region styling when using regular slider */
-.trim-region-overlay {
-  position: absolute;
-  height: 6px;
-  top: 5px; /* Align with slider track */
-  background-color: rgba(75, 156, 211, 0.4); /* Semi-transparent Carolina blue */
-  border-radius: 3px;
-  pointer-events: none; /* Allow clicks to pass through to slider */
-}
-
-/* Styling for RangeSlider (trim mode) */
-.video-timeline .bp4-range-slider .bp4-slider-progress {
-  background-color: var(--nc-button-blue);
-  opacity: 0.7;
-}
-
-.video-timeline .bp4-range-slider .bp4-slider-handle {
-  width: 10px;
-  height: 18px;
-  border-radius: 3px;
-  margin-top: -6px; /* Vertically center */
-  background-color: var(--nc-carolina-blue);
-}
-
-.video-timeline .bp4-range-slider .bp4-slider-handle[data-handle-index="0"] {
-  background-color: var(--nc-carolina-blue);
-}
-
-.video-timeline .bp4-range-slider .bp4-slider-handle[data-handle-index="1"] {
-  background-color: var(--nc-carolina-blue);
-}
-
-/* Time markers */
-.time-markers {
+/* Style for trim range slider */
+.trim-range-slider {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 100%;
-  pointer-events: none; /* Allow clicks to pass through */
+  width: 100%;
+  z-index: 1;
+  margin-top: 10px;
 }
 
-.time-marker {
-  position: absolute;
-  height: 100%;
-  transform: translateX(-50%);
-}
-
-.marker-line {
-  height: 6px;
-  width: 1px;
-  background-color: rgba(255, 255, 255, 0.3);
-  margin: 0 auto;
-}
-
-.marker-time {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
-  text-align: center;
-  margin-top: 8px;
-  white-space: nowrap;
-}
-
-/* Trim controls */
-.trim-controls {
+.timeline-info {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
-  gap: 8px;
+  font-size: 12px;
+  color: #e0e0e0;
+  margin-top: 2px;
 }
 
-.trim-toggle.active {
-  background-color: var(--nc-button-blue);
-  color: white;
+.timeline-time {
+  display: flex;
+  gap: 10px;
+}
+
+.current-time {
+  font-weight: 500;
+}
+
+.duration {
+  opacity: 0.7;
+}
+
+.frame-info {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.trim-points {
+  display: flex;
+  gap: 10px;
+}
+
+/* Override Blueprint slider styles for our timeline */
+.timeline-container .bp3-slider-handle {
+  border-radius: 2px;
+  width: 8px;
+}
+
+.timeline-container .bp3-slider-track {
+  height: 4px;
+}
+
+.timeline-container .bp3-range-slider .bp3-slider-handle {
+  height: 16px;
+  width: 8px;
+  border-radius: 2px;
+}
+
+/* Colors for in/out trim points */
+.timeline-container .bp3-range-slider .bp3-slider-handle:first-child {
+  background-color: #43BF4D;
+}
+
+.timeline-container .bp3-range-slider .bp3-slider-handle:last-child {
+  background-color: #FF7373;
+}
+
+/* In compact mode (for fullscreen) */
+.compact .timeline-container {
+  padding: 0 5px;
+}
+
+.compact .timeline-info {
+  font-size: 10px;
+}
+
+.compact .trim-points {
+  display: none;
 }

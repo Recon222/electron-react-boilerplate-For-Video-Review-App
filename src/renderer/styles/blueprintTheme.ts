@@ -1,4 +1,5 @@
-import { Colors, IColors } from '@blueprintjs/core';
+import { Colors } from '@blueprintjs/core/lib/esm/common/colors';
+import { IColors } from '@blueprintjs/core/lib/esm/common/colors';
 
 // Define our North Carolina blue color palette
 export const ncBlueColors = {

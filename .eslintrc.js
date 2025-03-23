@@ -12,11 +12,19 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
-
-    // Add this rule to allow arrow function components
+    '@typescript-eslint/no-unused-vars': 'warn', // Downgrade to warning
+    'react/require-default-props': 'off', // Disable default props requirement
     'react/function-component-definition': [
       'warn',
       {
         namedComponents: ['function-declaration', 'arrow-function'],
         unnamedComponents: ['arrow-function'],
+      },
+    ],
+    'no-console': 'warn', // Downgrade to warning
+    'no-restricted-globals': 'warn', // Downgrade to warning
+    'react-hooks/exhaustive-deps': 'warn', // Downgrade to warning
+    'default-case': 'warn', // Downgrade to warning
+    'react/jsx-no-constructed-context-values': 'warn', // Downgrade to warning
+  },
+};

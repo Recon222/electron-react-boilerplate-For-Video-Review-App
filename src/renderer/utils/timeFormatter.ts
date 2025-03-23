@@ -7,7 +7,7 @@
  * Format seconds to HH:MM:SS
  */
 export function formatTime(seconds: number): string {
-  if (isNaN(seconds) || seconds < 0) {
+  if (Number.isNaN(seconds) || seconds < 0) {
     return '00:00:00';
   }
 
@@ -15,14 +15,14 @@ export function formatTime(seconds: number): string {
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
 
-  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
+  return [h, m, s].map((v) => v.toString().padStart(2, '0')).join(':');
 }
 
 /**
  * Format seconds to HH:MM:SS.ms
  */
 export function formatTimeWithMs(seconds: number): string {
-  if (isNaN(seconds) || seconds < 0) {
+  if (Number.isNaN(seconds) || seconds < 0) {
     return '00:00:00.000';
   }
 
@@ -36,7 +36,7 @@ export function formatTimeWithMs(seconds: number): string {
  * @param fps - Frames per second of the video (default: 29.97)
  */
 export function secondsToSmpte(seconds: number, fps: number = 29.97): string {
-  if (isNaN(seconds) || seconds < 0) {
+  if (Number.isNaN(seconds) || seconds < 0) {
     return '00:00:00:00';
   }
 
@@ -45,7 +45,7 @@ export function secondsToSmpte(seconds: number, fps: number = 29.97): string {
   const s = Math.floor(seconds % 60);
   const f = Math.floor((seconds % 1) * fps);
 
-  return [h, m, s, f].map(v => v.toString().padStart(2, '0')).join(':');
+  return [h, m, s, f].map((v) => v.toString().padStart(2, '0')).join(':');
 }
 
 /**
@@ -77,7 +77,7 @@ export function smpteToSeconds(smpte: string, fps: number = 29.97): number {
  * @param fps - Frames per second (default: 29.97)
  */
 export function frameToSeconds(frame: number, fps: number = 29.97): number {
-  if (isNaN(frame) || frame < 0) {
+  if (Number.isNaN(frame) || frame < 0) {
     return 0;
   }
   return frame / fps;
@@ -89,7 +89,7 @@ export function frameToSeconds(frame: number, fps: number = 29.97): number {
  * @param fps - Frames per second (default: 29.97)
  */
 export function secondsToFrame(seconds: number, fps: number = 29.97): number {
-  if (isNaN(seconds) || seconds < 0) {
+  if (Number.isNaN(seconds) || seconds < 0) {
     return 0;
   }
   return Math.floor(seconds * fps);
@@ -141,7 +141,7 @@ export function parseTimecode(input: string, fps: number = 29.97): number {
 
   // Try to parse as seconds number
   const seconds = parseFloat(input);
-  return isNaN(seconds) ? 0 : seconds;
+  return Number.isNaN(seconds) ? 0 : seconds;
 }
 
 /**
@@ -153,7 +153,7 @@ export function parseTimecode(input: string, fps: number = 29.97): number {
 export function formatFrameDisplay(
   frameCount: number,
   totalFrames: number,
-  fps: number = 29.97
+  fps: number = 29.97,
 ): string {
   const currentTime = frameToSeconds(frameCount, fps);
   const totalTime = frameToSeconds(totalFrames, fps);
@@ -167,9 +167,9 @@ export function formatFrameDisplay(
  */
 export function calculateProgress(
   currentTime: number,
-  duration: number
+  duration: number,
 ): number {
-  if (isNaN(currentTime) || isNaN(duration) || duration <= 0) {
+  if (Number.isNaN(currentTime) || Number.isNaN(duration) || duration <= 0) {
     return 0;
   }
   return (currentTime / duration) * 100;
@@ -180,9 +180,9 @@ export function calculateProgress(
  */
 export function progressToTime(
   progressPercent: number,
-  duration: number
+  duration: number,
 ): number {
-  if (isNaN(progressPercent) || isNaN(duration)) {
+  if (Number.isNaN(progressPercent) || Number.isNaN(duration)) {
     return 0;
   }
   return (progressPercent / 100) * duration;

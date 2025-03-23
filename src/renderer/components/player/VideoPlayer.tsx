@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, Button, Dialog, Classes, Icon, Overlay } from '../../utils/blueprintComponents';
+import {
+  Card,
+  Button,
+  Dialog,
+  Classes,
+  Icon,
+  // Overlay not currently used
+} from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import Timeline from './Timeline';
 import TransportControls from './TransportControls';
@@ -23,56 +30,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const playerRef = useRef<HTMLDivElement>(null);
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [showDropZone, setShowDropZone] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  // Keeping for future drag animation implementation
+  const [_isDragging, _setIsDragging] = useState(false);
 
   // Placeholder for mpv.js reference
   // Will be properly implemented when we integrate mpv.js
   const mpvRef = useRef<any>(null);
 
-  // Effect to handle file drops
-  useEffect(() => {
-    const handleDragOver = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setShowDropZone(true);
-    };
-
-    const handleDragLeave = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setShowDropZone(false);
-    };
-
-    const handleDrop = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setShowDropZone(false);
-
-      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
-        const file = e.dataTransfer.files[0];
-        if (file.type.startsWith('video/')) {
-          // In a real implementation, we'd handle file path differently
-          // For now, we'll just use the file name
-          actions.loadFile(file.path || file.name);
-        }
-      }
-    };
-
-    const element = playerRef.current;
-    if (element) {
-      element.addEventListener('dragover', handleDragOver as EventListener);
-      element.addEventListener('dragleave', handleDragLeave as EventListener);
-      element.addEventListener('drop', handleDrop as EventListener);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener('dragover', handleDragOver as EventListener);
-        element.removeEventListener('dragleave', handleDragLeave as EventListener);
-        element.removeEventListener('drop', handleDrop as EventListener);
-      }
-    };
-  }, [actions]);
+  // Drag and drop handlers are implemented inline in the Card component
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -130,6 +95,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           actions.toggleMute();
           e.preventDefault();
           break;
+        default:
+          // No action needed
+          break;
       }
     };
 
@@ -156,6 +124,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       className={`video-player-container ${state.isFullscreen ? 'fullscreen' : ''}`}
       style={{ height, width }}
       ref={playerRef}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowDropZone(true);
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowDropZone(false);
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowDropZone(false);
+
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          if (file.type.startsWith('video/')) {
+            actions.loadFile(file.path || file.name);
+          }
+        }
+      }}
     >
       {/* Placeholder for mpv.js player */}
       <div className="video-viewport">
@@ -185,7 +175,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <div className="video-info">
               {state.fileName}
               <br />
-              {state.isPlaying ? 'Playing' : 'Paused'} at {state.currentTime.toFixed(2)} seconds
+              {state.isPlaying ? 'Playing' : 'Paused'} at{' '}
+              {state.currentTime.toFixed(2)} seconds
             </div>
           </div>
         )}
@@ -202,9 +193,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         {state.filePath && state.showControls && (
           <div className="video-controls-overlay">
             <Button
-              icon={state.isFullscreen ? "minimize" : "maximize"}
-              title={state.isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-              minimal={true}
+              icon={state.isFullscreen ? 'minimize' : 'maximize'}
+              title={
+                state.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'
+              }
+              minimal
               className="fullscreen-button"
               onClick={actions.toggleFullscreen}
             />

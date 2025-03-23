@@ -6,20 +6,6 @@ import VideoPlayer from './components/player/VideoPlayer';
 import icon from '../../assets/icon.svg';
 import './App.css';
 
-export default function App() {
-  return (
-    <ThemeProvider>
-      <PlayerProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<MainScreen />} />
-          </Routes>
-        </Router>
-      </PlayerProvider>
-    </ThemeProvider>
-  );
-}
-
 function MainScreen() {
   return (
     <div className="container">
@@ -29,15 +15,10 @@ function MainScreen() {
           <h1>Video Player</h1>
         </div>
         <div className="header-right">
-          <Button
-            icon="help"
-            minimal={true}
-            className={Classes.BUTTON}
-            title="Help"
-          />
+          <Button icon="help" minimal className={Classes.BUTTON} title="Help" />
           <Button
             icon="cog"
-            minimal={true}
+            minimal
             className={Classes.BUTTON}
             title="Settings"
           />
@@ -46,10 +27,7 @@ function MainScreen() {
 
       <div className="content">
         <div className="main-player-container">
-          <VideoPlayer
-            showFrameInfo={true}
-            showExportButton={true}
-          />
+          <VideoPlayer showFrameInfo showExportButton />
         </div>
 
         <div className="sidebar">
@@ -80,5 +58,19 @@ function MainScreen() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <PlayerProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainScreen />} />
+          </Routes>
+        </Router>
+      </PlayerProvider>
+    </ThemeProvider>
   );
 }

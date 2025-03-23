@@ -1,7 +1,12 @@
 import React from 'react';
-import { Button, Slider, RangeSlider, Classes } from '../../../utils/blueprintComponents';
-import { usePlayer } from '../../../context/PlayerContext';
-import { formatTime, calculateProgress } from '../../utils/timeFormatter';
+import {
+  Button,
+  Slider,
+  RangeSlider,
+  Classes,
+} from '../../utils/blueprintComponents';
+import { usePlayer } from '../../context/PlayerContext';
+import { formatTime } from '../../utils/timeFormatter';
 import './Timeline.css';
 
 interface TimelineProps {
@@ -10,19 +15,12 @@ interface TimelineProps {
 
 const Timeline: React.FC<TimelineProps> = ({ showFrameInfo = true }) => {
   const { state, actions } = usePlayer();
-  
-  const {
-    duration,
-    currentTime,
-    inPoint,
-    outPoint,
-    isPlaying,
-    fps
-  } = state;
+
+  const { duration, currentTime, inPoint, outPoint, isPlaying, fps } = state;
 
   // Calculate percent of playback progress
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
-  
+
   // Calculate current frame number
   const currentFrame = Math.round(currentTime * fps);
   const totalFrames = Math.round(duration * fps);
@@ -31,17 +29,17 @@ const Timeline: React.FC<TimelineProps> = ({ showFrameInfo = true }) => {
   const handleTimelineChange = (value: number) => {
     actions.seekToPercent(value);
   };
-  
+
   // Handle in/out range change
   const handleTrimRangeChange = (range: [number, number]) => {
     const [inPercent, outPercent] = range;
     const newInPoint = (inPercent / 100) * duration;
     const newOutPoint = (outPercent / 100) * duration;
-    
+
     actions.setInPoint(newInPoint);
     actions.setOutPoint(newOutPoint);
   };
-  
+
   // Convert in/out points to percentages for the range slider
   const inPointPercent = duration > 0 ? (inPoint / duration) * 100 : 0;
   const outPointPercent = duration > 0 ? (outPoint / duration) * 100 : 100;
@@ -60,7 +58,7 @@ const Timeline: React.FC<TimelineProps> = ({ showFrameInfo = true }) => {
           className="timeline-slider"
           disabled={!state.filePath}
         />
-        
+
         {/* In/Out trim points */}
         {state.filePath && (
           <RangeSlider
@@ -74,20 +72,20 @@ const Timeline: React.FC<TimelineProps> = ({ showFrameInfo = true }) => {
           />
         )}
       </div>
-      
+
       <div className="timeline-info">
         <div className="timeline-time">
           <span className="current-time">{formatTime(currentTime)}</span>
           <span className="duration">{formatTime(duration)}</span>
         </div>
-        
+
         {showFrameInfo && state.filePath && (
           <div className="frame-info">
             <span className="current-frame">Frame: {currentFrame}</span>
             <span className="total-frames">/ {totalFrames}</span>
           </div>
         )}
-        
+
         <div className="trim-points">
           <Button
             small

@@ -62,13 +62,15 @@ export function formatVideoInfo(metadata: VideoMetadata): string {
  */
 export function generateThumbnail(
   filePath: string,
-  timeInSeconds: number
+  timeInSeconds: number,
 ): Promise<string> {
   return new Promise((resolve) => {
     // This is a placeholder. In real code, we would generate a real thumbnail.
     // For now, just return a placeholder data URL
     setTimeout(() => {
-      resolve(`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==`);
+      resolve(
+        `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==`,
+      );
     }, 100);
   });
 }
@@ -103,7 +105,7 @@ export function calculateAspectRatio(width: number, height: number): string {
 export function formatPlaybackOverlay(
   currentTime: number,
   duration: number,
-  fps: number
+  fps: number,
 ): string {
   return `${formatTime(currentTime)} / ${formatTime(duration)} (${secondsToSmpte(currentTime, fps)})`;
 }
@@ -117,7 +119,9 @@ export function getKeyframes(filePath: string): Promise<number[]> {
     // This is a placeholder. In real code, we would extract actual keyframes.
     setTimeout(() => {
       // Generate some fake keyframe positions (in seconds)
-      const fakeKeyframes = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
+      const fakeKeyframes = [
+        0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+      ];
       resolve(fakeKeyframes);
     }, 1000);
   });
@@ -128,8 +132,18 @@ export function getKeyframes(filePath: string): Promise<number[]> {
  */
 export function isVideoFile(filename: string): boolean {
   const videoExtensions = [
-    '.mp4', '.mkv', '.avi', '.mov', '.webm', '.wmv',
-    '.flv', '.mpg', '.mpeg', '.m4v', '.3gp', '.ts'
+    '.mp4',
+    '.mkv',
+    '.avi',
+    '.mov',
+    '.webm',
+    '.wmv',
+    '.flv',
+    '.mpg',
+    '.mpeg',
+    '.m4v',
+    '.3gp',
+    '.ts',
   ];
 
   const extension = filename.substring(filename.lastIndexOf('.')).toLowerCase();
@@ -161,7 +175,7 @@ export function getDisplayFilename(filePath: string): string {
 export function suggestOutputFilename(
   inputFilename: string,
   inPoint: number,
-  outPoint: number
+  outPoint: number,
 ): string {
   if (!inputFilename) return 'output.mp4';
 
@@ -181,7 +195,10 @@ export function suggestOutputFilename(
 /**
  * Parse FFmpeg progress output for export progress updates
  */
-export function parseFFmpegProgress(progressText: string, duration: number): number {
+export function parseFFmpegProgress(
+  progressText: string,
+  duration: number,
+): number {
   if (!progressText || duration <= 0) return 0;
 
   // Try to extract time information

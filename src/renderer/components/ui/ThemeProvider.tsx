@@ -110,11 +110,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     };
   }, []);
 
-  return (
-    <div className={Classes.DARK}>
-      {children}
-    </div>
-  );
+  return <div className={Classes.DARK}>{children}</div>;
 };
 
 export default ThemeProvider;

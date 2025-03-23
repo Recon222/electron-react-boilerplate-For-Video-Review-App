@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Card, FormGroup, HTMLSelect, Slider, Button, ProgressBar, Callout, Classes, Label, Checkbox, NumericInput } from '../../utils/blueprintComponents';
+import {
+  Card,
+  FormGroup,
+  HTMLSelect,
+  Slider,
+  Button,
+  ProgressBar,
+  Callout,
+  Classes,
+  Label,
+  Checkbox,
+  NumericInput,
+} from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import { formatTime, formatTimeWithMs } from '../../utils/timeFormatter';
 import './ExportPanel.css';
@@ -36,11 +48,11 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ onClose }) => {
 
     // Base bitrate estimates by format (in kbps)
     const baseBitrates: Record<string, number> = {
-      'mp4': 3000,
-      'webm': 2000,
-      'mov': 4000,
-      'mkv': 3500,
-      'avi': 5000
+      mp4: 3000,
+      webm: 2000,
+      mov: 4000,
+      mkv: 3500,
+      avi: 5000,
     };
 
     // Quality factor (0.2 to 1.5 based on quality 1-100)
@@ -88,7 +100,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ onClose }) => {
     { label: 'WebM (VP9)', value: 'webm' },
     { label: 'MOV (QuickTime)', value: 'mov' },
     { label: 'MKV (Matroska)', value: 'mkv' },
-    { label: 'AVI', value: 'avi' }
+    { label: 'AVI', value: 'avi' },
   ];
 
   return (
@@ -132,7 +144,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ onClose }) => {
             onChange={(e) => setFormat(e.target.value)}
             disabled={state.isExporting}
             options={formats}
-            fill={true}
+            fill
           />
         </FormGroup>
 
@@ -207,7 +219,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ onClose }) => {
           <ProgressBar
             value={state.exportProgress / 100}
             intent="primary"
-            stripes={true}
+            stripes
             className="progress-bar"
           />
           <div className="progress-text">
@@ -224,7 +236,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ onClose }) => {
           className={Classes.BUTTON}
         />
         <Button
-          text={state.isExporting ? "Exporting..." : "Export"}
+          text={state.isExporting ? 'Exporting...' : 'Export'}
           intent="primary"
           onClick={handleExport}
           disabled={state.isExporting || !state.filePath}

@@ -1,5 +1,14 @@
-import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
-import { formatTime, calculateProgress } from '../utils/timeFormatter';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  ReactNode,
+  useMemo,
+} from 'react';
+import { formatTime } from '../utils/timeFormatter';
+// calculateProgress imported but not used in this file
 
 // Define the shape of our player state
 export interface PlayerState {
@@ -97,10 +106,13 @@ const initialPlayerState: PlayerState = {
 };
 
 // Create the context
-const PlayerContext = createContext<{
-  state: PlayerState;
-  actions: PlayerContextActions;
-} | undefined>(undefined);
+const PlayerContext = createContext<
+  | {
+      state: PlayerState;
+      actions: PlayerContextActions;
+    }
+  | undefined
+>(undefined);
 
 // Provider component
 interface PlayerProviderProps {
@@ -112,11 +124,11 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
   const mpvRef = useRef<any>(null);
 
   // Timer for auto-hiding controls
-  const controlsTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Helper to update state partially
   const updateState = (newState: Partial<PlayerState>) => {
-    setState(prev => ({ ...prev, ...newState }));
+    setState((prev) => ({ ...prev, ...newState }));
   };
 
   // Reset the auto-hide controls timer
@@ -154,213 +166,238 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         clearTimeout(controlsTimerRef.current);
       }
     };
-  }, [state.isPlaying, state.showControls]);
+  }, [state.isPlaying, state.showControls, resetControlsTimer]);
 
-  // Define the actions
-  const actions: PlayerContextActions = {
-    // File actions
-    loadFile: (filePath: string) => {
-      const fileName = filePath.split('/').pop() || filePath.split('\\').pop() || 'Unknown';
+  // Define the actions with useMemo to prevent unnecessary recreations
+  const actions: PlayerContextActions = useMemo(
+    () => ({
+      // File actions
+      loadFile: (filePath: string) => {
+        const fileName =
+          filePath.split('/').pop() || filePath.split('\\').pop() || 'Unknown';
 
-      // Reset player state for new file
-      updateState({
-        filePath,
-        fileName,
-        currentTime: 0,
-        isPlaying: false,
-        inPoint: 0,
-        outPoint: 0,
-      });
+        // Reset player state for new file
+        updateState({
+          filePath,
+          fileName,
+          currentTime: 0,
+          isPlaying: false,
+          inPoint: 0,
+          outPoint: 0,
+        });
 
-      // If we have mpv instance, load the file
-      if (mpvRef.current) {
-        mpvRef.current.command('loadfile', filePath);
-      }
-    },
+        // If we have mpv instance, load the file
+        if (mpvRef.current) {
+          mpvRef.current.command('loadfile', filePath);
+        }
+      },
 
-    unloadFile: () => {
-      updateState(initialPlayerState);
-      if (mpvRef.current) {
-        mpvRef.current.command('stop');
-      }
-    },
+      unloadFile: () => {
+        updateState(initialPlayerState);
+        if (mpvRef.current) {
+          mpvRef.current.command('stop');
+        }
+      },
 
-    // Playback controls
-    play: () => {
-      if (mpvRef.current && state.filePath) {
-        mpvRef.current.property('pause', false);
-        updateState({ isPlaying: true });
-      }
-    },
+      // Playback controls
+      play: () => {
+        if (mpvRef.current && state.filePath) {
+          mpvRef.current.property('pause', false);
+          updateState({ isPlaying: true });
+        }
+      },
 
-    pause: () => {
-      if (mpvRef.current) {
-        mpvRef.current.property('pause', true);
-        updateState({ isPlaying: false });
-      }
-    },
+      pause: () => {
+        if (mpvRef.current) {
+          mpvRef.current.property('pause', true);
+          updateState({ isPlaying: false });
+        }
+      },
 
-    togglePlayPause: () => {
-      if (state.isPlaying) {
-        actions.pause();
-      } else {
-        actions.play();
-      }
-    },
+      togglePlayPause: () => {
+        if (state.isPlaying) {
+          mpvRef.current?.property('pause', true);
+          updateState({ isPlaying: false });
+        } else if (state.filePath) {
+          mpvRef.current?.property('pause', false);
+          updateState({ isPlaying: true });
+        }
+      },
 
-    seek: (time: number) => {
-      if (mpvRef.current) {
-        // Ensure time is within valid range
-        const clampedTime = Math.max(0, Math.min(time, state.duration));
-        mpvRef.current.property('time-pos', clampedTime);
-        updateState({ currentTime: clampedTime });
-      }
-    },
+      seek: (time: number) => {
+        if (mpvRef.current) {
+          // Ensure time is within valid range
+          const clampedTime = Math.max(0, Math.min(time, state.duration));
+          mpvRef.current.property('time-pos', clampedTime);
+          updateState({ currentTime: clampedTime });
+        }
+      },
 
-    seekToPercent: (percent: number) => {
-      if (state.duration > 0) {
-        const time = (percent / 100) * state.duration;
-        actions.seek(time);
-      }
-    },
+      seekToPercent: (percent: number) => {
+        if (state.duration > 0) {
+          const time = (percent / 100) * state.duration;
+          const clampedTime = Math.max(0, Math.min(time, state.duration));
+          mpvRef.current?.property('time-pos', clampedTime);
+          updateState({ currentTime: clampedTime });
+        }
+      },
 
-    stepForward: () => {
-      if (mpvRef.current) {
-        mpvRef.current.command('frame-step');
-        // The time update will come from the mpv property change
-      }
-    },
+      stepForward: () => {
+        if (mpvRef.current) {
+          mpvRef.current.command('frame-step');
+          // The time update will come from the mpv property change
+        }
+      },
 
-    stepBackward: () => {
-      if (mpvRef.current) {
-        mpvRef.current.command('frame-back-step');
-        // The time update will come from the mpv property change
-      }
-    },
+      stepBackward: () => {
+        if (mpvRef.current) {
+          mpvRef.current.command('frame-back-step');
+          // The time update will come from the mpv property change
+        }
+      },
 
-    jumpToInPoint: () => {
-      actions.seek(state.inPoint);
-    },
+      jumpToInPoint: () => {
+        if (mpvRef.current) {
+          const time = state.inPoint;
+          mpvRef.current.property('time-pos', time);
+          updateState({ currentTime: time });
+        }
+      },
 
-    jumpToOutPoint: () => {
-      actions.seek(state.outPoint);
-    },
+      jumpToOutPoint: () => {
+        if (mpvRef.current) {
+          const time = state.outPoint;
+          mpvRef.current.property('time-pos', time);
+          updateState({ currentTime: time });
+        }
+      },
 
-    // Volume controls
-    setVolume: (volume: number) => {
-      if (mpvRef.current) {
-        const clampedVolume = Math.max(0, Math.min(volume, 1));
-        mpvRef.current.property('volume', clampedVolume * 100);
-        updateState({ volume: clampedVolume, muted: clampedVolume === 0 });
-      }
-    },
+      // Volume controls
+      setVolume: (volume: number) => {
+        if (mpvRef.current) {
+          const clampedVolume = Math.max(0, Math.min(volume, 1));
+          mpvRef.current.property('volume', clampedVolume * 100);
+          updateState({ volume: clampedVolume, muted: clampedVolume === 0 });
+        }
+      },
 
-    toggleMute: () => {
-      if (mpvRef.current) {
-        const newMuted = !state.muted;
-        mpvRef.current.property('mute', newMuted);
-        updateState({ muted: newMuted });
-      }
-    },
+      toggleMute: () => {
+        if (mpvRef.current) {
+          const newMuted = !state.muted;
+          mpvRef.current.property('mute', newMuted);
+          updateState({ muted: newMuted });
+        }
+      },
 
-    setPlaybackRate: (rate: number) => {
-      if (mpvRef.current) {
-        mpvRef.current.property('speed', rate);
-        updateState({ playbackRate: rate });
-      }
-    },
+      setPlaybackRate: (rate: number) => {
+        if (mpvRef.current) {
+          mpvRef.current.property('speed', rate);
+          updateState({ playbackRate: rate });
+        }
+      },
 
-    // Trim controls
-    setInPoint: (time: number) => {
-      const inPoint = Math.max(0, Math.min(time, state.duration));
-      updateState({
-        inPoint,
-        outPoint: Math.max(inPoint + 1, state.outPoint) // Ensure out point is after in point
-      });
-    },
+      // Trim controls
+      setInPoint: (time: number) => {
+        const inPoint = Math.max(0, Math.min(time, state.duration));
+        updateState({
+          inPoint,
+          outPoint: Math.max(inPoint + 1, state.outPoint), // Ensure out point is after in point
+        });
+      },
 
-    setOutPoint: (time: number) => {
-      const outPoint = Math.max(0, Math.min(time, state.duration));
-      updateState({
-        outPoint,
-        inPoint: Math.min(outPoint - 1, state.inPoint) // Ensure in point is before out point
-      });
-    },
+      setOutPoint: (time: number) => {
+        const outPoint = Math.max(0, Math.min(time, state.duration));
+        updateState({
+          outPoint,
+          inPoint: Math.min(outPoint - 1, state.inPoint), // Ensure in point is before out point
+        });
+      },
 
-    clearInPoint: () => {
-      updateState({ inPoint: 0 });
-    },
+      clearInPoint: () => {
+        updateState({ inPoint: 0 });
+      },
 
-    clearOutPoint: () => {
-      updateState({ outPoint: state.duration });
-    },
+      clearOutPoint: () => {
+        updateState({ outPoint: state.duration });
+      },
 
-    // UI controls
-    toggleFullscreen: () => {
-      // This is handled by Electron in the actual implementation
-      updateState({ isFullscreen: !state.isFullscreen });
-    },
+      // UI controls
+      toggleFullscreen: () => {
+        // This is handled by Electron in the actual implementation
+        updateState({ isFullscreen: !state.isFullscreen });
+      },
 
-    toggleControls: () => {
-      updateState({ showControls: !state.showControls });
-      resetControlsTimer();
-    },
+      toggleControls: () => {
+        updateState({ showControls: !state.showControls });
+        resetControlsTimer();
+      },
 
-    // Export controls - in a real implementation these would call to the main process
-    startExport: (format: string, quality: number) => {
-      if (!state.filePath || state.inPoint >= state.outPoint) {
-        return;
-      }
+      // Export controls - in a real implementation these would call to the main process
+      startExport: (format: string, quality: number) => {
+        if (!state.filePath || state.inPoint >= state.outPoint) {
+          return;
+        }
 
-      updateState({
-        isExporting: true,
-        exportProgress: 0,
-        exportFormat: format,
-        exportQuality: quality
-      });
+        updateState({
+          isExporting: true,
+          exportProgress: 0,
+          exportFormat: format,
+          exportQuality: quality,
+        });
 
-      // In a real implementation, we would trigger the export via IPC
-      console.log(`Start export: ${format}, quality: ${quality}`);
-      console.log(`Trim: ${formatTime(state.inPoint)} to ${formatTime(state.outPoint)}`);
+        // In a real implementation, we would trigger the export via IPC
+        console.log(`Start export: ${format}, quality: ${quality}`);
+        console.log(
+          `Trim: ${formatTime(state.inPoint)} to ${formatTime(state.outPoint)}`,
+        );
 
-      // Simulate export progress for now
-      const simulateProgress = () => {
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += 1;
-          updateState({ exportProgress: progress });
+        // Simulate export progress for now
+        const simulateProgress = () => {
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 1;
+            updateState({ exportProgress: progress });
 
-          if (progress >= 100 || !state.isExporting) {
-            clearInterval(interval);
-            if (state.isExporting) {
-              updateState({ isExporting: false, exportProgress: 100 });
-              setTimeout(() => updateState({ exportProgress: 0 }), 1000);
+            if (progress >= 100 || !state.isExporting) {
+              clearInterval(interval);
+              if (state.isExporting) {
+                updateState({ isExporting: false, exportProgress: 100 });
+                setTimeout(() => updateState({ exportProgress: 0 }), 1000);
+              }
             }
-          }
-        }, 100);
-      };
+          }, 100);
+        };
 
-      simulateProgress();
-    },
+        simulateProgress();
+      },
 
-    cancelExport: () => {
-      // In a real implementation, we would cancel the export via IPC
-      updateState({ isExporting: false, exportProgress: 0 });
-    },
+      cancelExport: () => {
+        // In a real implementation, we would cancel the export via IPC
+        updateState({ isExporting: false, exportProgress: 0 });
+      },
 
-    // Set MPV reference
-    setMpvRef: (ref: any) => {
-      mpvRef.current = ref;
-    }
-  };
+      // Set MPV reference
+      setMpvRef: (ref: any) => {
+        mpvRef.current = ref;
+      },
+    }),
+    [
+      state.duration,
+      state.filePath,
+      state.isPlaying,
+      state.inPoint,
+      state.outPoint,
+      state.muted,
+      state.isExporting,
+      resetControlsTimer,
+    ],
+  );
 
-  // Context value
-  const value = { state, actions };
+  // Context value wrapped in useMemo for performance optimization
+  const value = useMemo(() => ({ state, actions }), [state, actions]);
 
   return (
-    <PlayerContext.Provider value={value}>
-      {children}
-    </PlayerContext.Provider>
+    <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>
   );
 };
 

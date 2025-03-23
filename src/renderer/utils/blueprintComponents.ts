@@ -21,7 +21,7 @@ export {
   Position,
   ProgressBar,
   RangeSlider,
-  Slider
+  Slider,
 } from '@blueprintjs/core';
 
 export { Colors } from '@blueprintjs/core';

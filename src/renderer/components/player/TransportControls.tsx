@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Button, ButtonGroup, Slider, Popover, Menu, MenuItem, Position, Divider, Classes, Icon } from '../../utils/blueprintComponents';
+import {
+  Button,
+  ButtonGroup,
+  Slider,
+  Popover,
+  Menu,
+  MenuItem,
+  Position,
+  Divider,
+  Classes,
+  Icon,
+} from '../../utils/blueprintComponents';
 import { usePlayer } from '../../context/PlayerContext';
 import './TransportControls.css';
 
@@ -10,19 +21,13 @@ interface TransportControlsProps {
 
 const TransportControls: React.FC<TransportControlsProps> = ({
   compact = false,
-  showExportButton = true
+  showExportButton = true,
 }) => {
   const { state, actions } = usePlayer();
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
-  const {
-    isPlaying,
-    volume,
-    muted,
-    playbackRate,
-    filePath,
-    isExporting
-  } = state;
+  const { isPlaying, volume, muted, playbackRate, filePath, isExporting } =
+    state;
 
   // Handle playback rate change
   const handlePlaybackRateChange = (rate: number) => {
@@ -48,7 +53,10 @@ const TransportControls: React.FC<TransportControlsProps> = ({
       <MenuItem text="0.25x" onClick={() => handlePlaybackRateChange(0.25)} />
       <MenuItem text="0.5x" onClick={() => handlePlaybackRateChange(0.5)} />
       <MenuItem text="0.75x" onClick={() => handlePlaybackRateChange(0.75)} />
-      <MenuItem text="Normal (1x)" onClick={() => handlePlaybackRateChange(1)} />
+      <MenuItem
+        text="Normal (1x)"
+        onClick={() => handlePlaybackRateChange(1)}
+      />
       <MenuItem text="1.25x" onClick={() => handlePlaybackRateChange(1.25)} />
       <MenuItem text="1.5x" onClick={() => handlePlaybackRateChange(1.5)} />
       <MenuItem text="2x" onClick={() => handlePlaybackRateChange(2)} />
@@ -59,7 +67,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
     <div className={`transport-controls ${compact ? 'compact' : ''}`}>
       <div className="transport-main-controls">
         {/* Left side - Step controls */}
-        <ButtonGroup minimal={true} className="step-controls">
+        <ButtonGroup minimal className="step-controls">
           <Button
             icon="step-backward"
             title="Jump to start"
@@ -117,7 +125,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
                     labelRenderer={false}
                     onChange={handleVolumeChange}
                     value={muted ? 0 : volume}
-                    vertical={true}
+                    vertical
                     className="volume-slider"
                   />
                 </div>
@@ -133,10 +141,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
           </div>
 
           {/* Playback rate control */}
-          <Popover
-            position={Position.TOP}
-            content={playbackRateMenu}
-          >
+          <Popover position={Position.TOP} content={playbackRateMenu}>
             <Button
               icon="speed"
               text={!compact ? `${playbackRate}x` : undefined}
@@ -150,7 +155,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
           {showExportButton && (
             <Button
               icon="export"
-              text={!compact ? "Export" : undefined}
+              text={!compact ? 'Export' : undefined}
               title="Export video clip"
               intent="primary"
               disabled={!filePath || isExporting}
@@ -171,7 +176,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
       {/* If in compact mode, hide less important controls */}
       {!compact && (
         <div className="transport-secondary-controls">
-          <ButtonGroup minimal={true}>
+          <ButtonGroup minimal>
             <Button
               icon="list"
               text="Jump to In/Out Points"
@@ -195,9 +200,7 @@ const TransportControls: React.FC<TransportControlsProps> = ({
             )}
 
             {playbackRate !== 1 && (
-              <span className="playback-rate-indicator">
-                {playbackRate}x
-              </span>
+              <span className="playback-rate-indicator">{playbackRate}x</span>
             )}
           </div>
         </div>

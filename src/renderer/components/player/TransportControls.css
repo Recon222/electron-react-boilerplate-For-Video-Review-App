@@ -1,0 +1,145 @@
+.transport-controls {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: var(--nc-dark-bg-color);
+  border-top: 1px solid var(--nc-light-bg-color);
+  user-select: none;
+}
+
+.transport-main-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.transport-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-controls {
+  display: flex;
+  align-items: center;
+}
+
+/* Custom styling for Blueprint buttons */
+.transport-controls .bp4-button {
+  background-color: transparent;
+  color: var(--nc-text-color);
+  box-shadow: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.transport-controls .bp4-button:hover {
+  background-color: rgba(75, 156, 211, 0.15);
+  color: white;
+}
+
+.transport-controls .bp4-button:active {
+  background-color: rgba(75, 156, 211, 0.3);
+}
+
+/* Play/Pause button styling */
+.play-pause-button {
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  background-color: var(--nc-carolina-blue) !important;
+  color: white !important;
+}
+
+.play-pause-button:hover {
+  background-color: var(--nc-button-blue) !important;
+}
+
+.play-pause-button:active {
+  background-color: var(--nc-button-blue) !important;
+}
+
+/* Export button styling */
+.export-button {
+  background-color: var(--nc-carolina-blue) !important;
+  color: white !important;
+}
+
+.export-button:hover {
+  background-color: var(--nc-button-blue) !important;
+}
+
+/* Volume slider styling */
+.volume-slider-container {
+  height: 120px;
+  padding: 10px;
+  background-color: var(--nc-bg-color);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.volume-slider {
+  height: 100px;
+}
+
+.volume-control {
+  margin-right: 8px;
+}
+
+/* Secondary controls */
+.transport-secondary-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playback-info {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--nc-text-muted);
+}
+
+.current-file {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 12px;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playback-rate-indicator {
+  padding: 2px 6px;
+  background-color: var(--nc-light-bg-color);
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Compact mode */
+.transport-controls.compact {
+  padding: 5px 8px;
+}
+
+.transport-controls.compact .play-pause-button {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.transport-controls.compact .bp4-button {
+  min-height: 24px;
+  min-width: 24px;
+}

@@ -1,0 +1,151 @@
+.export-panel {
+  width: 400px;
+  background-color: var(--nc-bg-color) !important;
+  border: 1px solid var(--nc-light-bg-color) !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4) !important;
+  padding: 20px !important;
+}
+
+.export-panel h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--nc-text-color);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* File information callout */
+.file-info {
+  margin-bottom: 16px;
+  padding: 10px !important;
+  background-color: var(--nc-dark-bg-color) !important;
+}
+
+.file-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.file-detail .label {
+  color: var(--nc-text-muted);
+  font-weight: 500;
+}
+
+.file-detail .value {
+  font-family: monospace;
+  color: var(--nc-text-color);
+}
+
+/* Form styling */
+.export-form {
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  color: var(--nc-text-color) !important;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* Quality slider customization */
+.quality-slider {
+  margin-bottom: 4px;
+}
+
+.quality-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--nc-text-muted);
+  margin-top: 4px;
+}
+
+/* Filename input group */
+.filename-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.filename-input-group input {
+  flex: 1;
+  background-color: var(--nc-dark-bg-color) !important;
+  color: var(--nc-text-color) !important;
+  border-color: var(--nc-light-bg-color) !important;
+  box-shadow: none !important;
+}
+
+.file-extension {
+  margin-left: 8px;
+  color: var(--nc-text-muted);
+  font-family: monospace;
+}
+
+/* Checkbox group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-group .bp4-checkbox {
+  margin-bottom: 0;
+}
+
+.checkbox-group .bp4-control-indicator {
+  background-color: var(--nc-dark-bg-color) !important;
+  border-color: var(--nc-light-bg-color) !important;
+}
+
+/* Size estimate */
+.size-estimate {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--nc-dark-bg-color);
+  border-radius: 3px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.size-estimate .label {
+  color: var(--nc-text-muted);
+  font-weight: 500;
+}
+
+.size-estimate .value {
+  font-weight: 600;
+  color: var(--nc-carolina-blue);
+}
+
+/* Progress bar */
+.export-progress {
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  margin-bottom: 4px;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 12px;
+  color: var(--nc-text-muted);
+}
+
+/* Action buttons */
+.export-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.export-actions button {
+  min-width: 90px;
+}

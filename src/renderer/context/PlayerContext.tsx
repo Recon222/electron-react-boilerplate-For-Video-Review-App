@@ -78,6 +78,9 @@ interface PlayerContextActions {
 
   // MPV reference (to be set by the VideoPlayer component)
   setMpvRef: (ref: any) => void;
+  
+  // State update function for MPV interactions
+  updateState: (newState: Partial<PlayerState>) => void;
 }
 
 // Define initial state
@@ -171,6 +174,11 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
   // Define the actions with useMemo to prevent unnecessary recreations
   const actions: PlayerContextActions = useMemo(
     () => ({
+      // Direct state update for MPV component
+      updateState: (newState: Partial<PlayerState>) => {
+        setState((prev) => ({ ...prev, ...newState }));
+      },
+      
       // File actions
       loadFile: (filePath: string) => {
         const fileName =

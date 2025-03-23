@@ -168,6 +168,13 @@ const configuration: webpack.Configuration = {
     __dirname: false,
     __filename: false,
   },
+  
+  // Add this for mpv.js
+  resolve: {
+    fallback: {
+      path: require.resolve('path-browserify')
+    }
+  },
 
   devServer: {
     port,

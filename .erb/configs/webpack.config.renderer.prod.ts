@@ -95,6 +95,13 @@ const configuration: webpack.Configuration = {
     minimize: true,
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
+  
+  // Add this for mpv.js
+  resolve: {
+    fallback: {
+      path: require.resolve('path-browserify')
+    }
+  },
 
   plugins: [
     /**

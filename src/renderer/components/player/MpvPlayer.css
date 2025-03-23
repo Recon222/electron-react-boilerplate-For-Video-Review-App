@@ -1,0 +1,27 @@
+/* src/renderer/components/player/MpvPlayer.css */
+.mpv-player {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: block;
+}
+
+.mpv-player:focus {
+  outline: none;
+}
+
+/* Add a placeholder until video loads */
+.mpv-player:empty {
+  background-image: linear-gradient(45deg, #1c2b3a, #34495e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mpv-player:empty::after {
+  content: "Loading player...";
+  color: rgba(255, 255, 255, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+               Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}

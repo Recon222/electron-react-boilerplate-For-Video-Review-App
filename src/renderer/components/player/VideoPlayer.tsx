@@ -11,6 +11,7 @@ import { usePlayer } from '../../context/PlayerContext';
 import Timeline from './Timeline';
 import TransportControls from './TransportControls';
 import ExportPanel from './ExportPanel';
+import MpvPlayer from './MpvPlayer';
 import './VideoPlayer.css';
 
 interface VideoPlayerProps {
@@ -147,7 +148,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         }
       }}
     >
-      {/* Placeholder for mpv.js player */}
       <div className="video-viewport">
         {!state.filePath ? (
           <div className="empty-player">
@@ -155,30 +155,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <div className="empty-text">
               <h3>No video loaded</h3>
               <p>Drop a video file here or use the open button</p>
-              {/* In a real implementation, we'd have a proper file picker */}
               <Button
                 icon="folder-open"
                 text="Open Video"
                 intent="primary"
                 className={Classes.BUTTON}
                 onClick={() => {
-                  // This would open a file picker in a real implementation
-                  // For now, we'll just simulate loading a file
-                  actions.loadFile('sample_video.mp4');
+                  // Open dialog to select a file
+                  window.electron.ipcRenderer.invoke('open-file-dialog')
+                    .then((result: string[]) => {
+                      if (result && result.length > 0) {
+                        actions.loadFile(result[0]);
+                      }
+                    });
                 }}
               />
             </div>
           </div>
         ) : (
-          // This div will be replaced with the actual mpv.js component
-          <div className="video-placeholder">
-            <div className="video-info">
-              {state.fileName}
-              <br />
-              {state.isPlaying ? 'Playing' : 'Paused'} at{' '}
-              {state.currentTime.toFixed(2)} seconds
-            </div>
-          </div>
+          // Using the actual mpv player component
+          <MpvPlayer 
+            onMouseDown={actions.togglePlayPause}
+          />
         )}
 
         {/* Overlay for drag and drop */}
